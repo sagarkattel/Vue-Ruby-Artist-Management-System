@@ -1,6 +1,12 @@
 # app/controllers/user_controller.rb
 class UserController < ApplicationController
   # before_action :authenticate_user, only: [:index, :edit, :update, :destroy]
+
+  def show
+    @user=User.find(params[:id])
+    render json:@user
+  end
+
   def new
     @user = User.new
     render json:@user

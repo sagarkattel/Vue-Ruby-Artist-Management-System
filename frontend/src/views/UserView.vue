@@ -3,7 +3,7 @@
 <template>
   <div>
     <h1>Users</h1>
-    <button  class="buttons">Create User</button>
+    <button @click="gotocreateuser"  class="buttons">Create User</button>
 
 
     <table class="user-table">
@@ -17,7 +17,7 @@
         <tr v-for="(detail, index) in users" :key="index">
           <td>{{ detail.email }}</td>
           <td>
-            <router-link :to="{ path: '/edit-user/' + index }">Edit</router-link> |
+            <router-link :to="{ path: '/edituser/' + detail.id }">Edit</router-link> |
             <a href="/user" @click="deleteUser(detail.id)">Delete</a>
           </td>
         </tr>
@@ -27,7 +27,8 @@
 </template>
 
 <script>
-  import axios from 'axios';
+  import router from '@/router';
+import axios from 'axios';
   
   export default {
     data() {
@@ -61,6 +62,9 @@
         }
         
       },
+      gotocreateuser(){
+        router.push("/register")
+      }
     },
   };
   </script>

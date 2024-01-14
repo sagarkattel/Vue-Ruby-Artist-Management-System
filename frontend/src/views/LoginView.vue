@@ -1,19 +1,3 @@
-<script setup>
-import { ref } from 'vue';
-// const name=ref("");
-
-const onSubmit=()=>{
-
-    const formdata={
-        email:email.value,
-        password:password.value
-    }
-    console.log("onSubmit");
-    console.log(formdata)
-}
-
-</script>
-
 <template>
     <h1>Login</h1>
     
@@ -33,3 +17,36 @@ const onSubmit=()=>{
     <div>Don't have an Account yet? <router-link :to="{ path: '/register' }">Register</router-link></div>
 
 </template>
+
+<script setup>
+import axios from 'axios';
+import { ref } from 'vue';
+import router from '@/router';
+
+import { useUserStore } from "@/stores/user";
+
+
+
+const userStore = useUserStore();
+
+const onSubmit=async()=>{
+    try{
+    const formdata={
+        email:email.value,
+        password:password.value
+    }
+    const response=await axios.post("http://127.0.0.1:3000/login",formdata);
+    console.log("The response is ",response.data);
+    console.log(response.status)
+    if(response.status==200){
+        userStore.setToken(response.data.token);
+        userStore.setUser(response.data.user);
+        router.push("/")
+    }
+}
+catch(error){
+    console.log(error);
+}
+}
+
+</script>

@@ -1,27 +1,4 @@
-<script setup>
-import { ref } from 'vue';
-// const name=ref("");
 
-const onSubmit=()=>{
-
-    const formdata={
-        first_name:first_name.value,
-        last_name:last_name.value,
-        email:email.value,
-        password:password.value,
-        phone:phone.value,
-        dob:dob.value,
-        gender:gender.value,
-        address:address.value
-        
-    }
-      
-    console.log("onSubmit");
-    console.log(formdata)
-
-}
-
-</script>
 
 <template>
     <h1>Register</h1>
@@ -51,7 +28,11 @@ const onSubmit=()=>{
     </div>
     <div>
         <label for="gender">Gender</label>
-        <input type="text" id="gender" />
+        <select id="gender" defaultValue="Male">
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+              </select>
     </div>
     <div>
         <label for="address">Address</label>
@@ -69,3 +50,40 @@ const onSubmit=()=>{
     
 
 </template>
+
+
+<script setup>
+import router from '@/router';
+import axios from 'axios';
+import { ref } from 'vue';
+// const name=ref("");
+
+const onSubmit=async()=>{
+    try{
+    const formdata={
+        first_name:first_name.value,
+        last_name:last_name.value,
+        email:email.value,
+        password:password.value,
+        phone:phone.value,
+        dob:dob.value,
+        gender:gender.value,
+        address:address.value
+        
+    }
+    const response=await axios.post("http://127.0.0.1:3000/user",formdata);
+    if (response.status === 201 ) {
+            router.push("/user")
+        } else {
+            console.log("Error: Unexpected response from the server");
+        }  
+    }  
+    
+
+catch(error){
+    console.log(error)
+}
+
+}
+
+</script>

@@ -1,7 +1,7 @@
 <template>
     <div>
       <h1>Artist Management System</h1>
-      <button class="buttons">Create Music</button>
+      <button @click="navigatecreateuser" class="buttons">Create Music</button>
   
       
 
@@ -26,10 +26,10 @@
             <td>{{ artist?.first_release_year }}</td>
             <td>{{ artist?.no_of_albums_released }}</td>
             <td>
-              <router-link :to="{ path: '/edit-user/' + index }">Music</router-link> |
+              <router-link :to="{ path: +artist.id+'/music/'  }">Music</router-link> |
         
-              <router-link :to="{ path: '/edit-user/' + index }">Edit</router-link> |
-              <a href="#" @click="deleteArtist(artist.id)">Delete</a>
+              <router-link :to="{ path: '/editartist/'+artist.id }">Edit</router-link> |
+              <a href="/artist" @click="deleteArtist(artist.id)">Delete</a>
             
             </td>
         </tr>
@@ -40,8 +40,9 @@
     
   </template>
   
-  <script>
+  <script >
   import axios from 'axios';
+  import router from '@/router';
   
   export default {
     data() {
@@ -70,18 +71,17 @@
         catch(error){
             console.log(error)
         }
-        // Implement the logic to delete the artist with the given ID
-        // You can use Vue-resource, Axios, or any other method to make an API call for deletion
-        // Update the artists array after successful deletion
+       
       },
+      navigatecreateuser(){
+        router.push("/createartist")
+      }
     },
   };
   </script>
   
-  <style>
-    h1 {
-      text-align: center;
-    }
+  <style scoped>
+ 
   
     .buttons {
       display: inline-block;

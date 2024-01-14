@@ -3,6 +3,8 @@ class ArtistsController < ApplicationController
     before_action :set_artist, only: [:show, :edit, :update, :destroy]
 
     def show
+        @artist=Artist.find(params[:id])
+        render json:@artist,status: 201
     end
     def index
         @artist=Artist.all

@@ -15,12 +15,18 @@ const router = createRouter({
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () => import('../views/UserView.vue')
+      component: () => import('../views/UserView.vue'),
+      meta: {
+        requiresAuth: true,
+      },
     },
     {
       path: '/artist',
       name: 'artist',
-      component: () => import('../views/ArtistView.vue')
+      component: () => import('../views/ArtistView.vue'),
+      meta: {
+        requiresAuth: true,
+      },
     }
     ,
     {
@@ -33,7 +39,30 @@ const router = createRouter({
       path: '/register',
       name: 'register',
       component: () => import('../views/RegisterView.vue')
-    }
+    },
+    {
+      path: '/edituser/:id',
+      name: 'edituser',
+      component: () => import('../views/UserEditView.vue')
+    },
+    {
+      path: '/editartist/:id',
+      name: 'editartist',
+      component: () => import('../views/ArtistEditView.vue')
+    },
+    {
+      path: '/createartist',
+      name: 'createartist',
+      component: () => import('../views/ArtistCreateView.vue')
+    },
+
+    {
+      path: '/:artistid/music',
+      name: 'music',
+      component: () => import('../views/MusicView.vue'),
+      
+    },
+
   ]
 })
 

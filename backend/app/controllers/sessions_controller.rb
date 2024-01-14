@@ -8,7 +8,7 @@ class SessionsController < ApplicationController
       payload = { user_id: user.id } 
       token = JwtToken.encode(payload) 
       time = Time.now + 24.hour.to_i
-      render json: { token: token, message: "Logged In successfully" }, status: 201
+      render json: { token: token, message: "Logged In successfully",user: user }, status: 200
     else
       render json: { message: "Invalid Email or password" }, status: :unprocessable_entity
     end
