@@ -10,7 +10,7 @@
     </div>
     <div>
         <label for="dob">Date of Birth</label>
-        <input type="date" id="dob"  v-model="artistData.value.date" />
+        <input type="date" id="dob"  v-model="formattedDate" />
     </div>
     <div>
         <label for="gender">Gender</label>
@@ -38,7 +38,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, reactive } from 'vue';
+import { ref, onMounted, reactive,computed } from 'vue';
 import { useRoute } from 'vue-router';
 import axios from 'axios';
 import router from '@/router';
@@ -51,6 +51,18 @@ onMounted(() => {
     params.value = route.params.id; 
     fetchArtists();
 });
+
+const formattedDate = computed(() => {
+      const isValidDate = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z$/.test(artistData.value.dob);
+      if (isValidDate) {
+        const date = new Date(artistData.value.dob);
+        const formatted = date.toISOString().split('T')[0];
+        return formatted;
+      } else {
+        console.error('Invalid date format:', artistData.value.dob);
+        return ''; 
+      }
+    });
 
 const fetchArtists = async () => {
     try {

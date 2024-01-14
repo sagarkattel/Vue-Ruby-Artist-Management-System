@@ -16,6 +16,7 @@ router.beforeEach((to, from, next) => {
   
     // If the route requires authentication and the user is not present, redirect to login
     if (to.meta.requiresAuth && !userStore.user) {
+      userStore.error="Login First"
       next('/login');
     } else {
       next();

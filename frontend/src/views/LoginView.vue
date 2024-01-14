@@ -1,6 +1,10 @@
 <template>
     <h1>Login</h1>
-    
+    <div v-if="userStore?.error" class="error">{{ userStore?.error }}</div>
+    <div v-if="validateerror" class="error">
+        {{validateerror}}
+    </div>
+    <br>
     <div>
         <label for="email">Email</label>
         <input type="email" id="email"  />
@@ -25,12 +29,16 @@ import router from '@/router';
 
 import { useUserStore } from "@/stores/user";
 
-
+let validateerror=ref("");
 
 const userStore = useUserStore();
 
 const onSubmit=async()=>{
     try{
+        if(!email.value ||!password.value){
+            validateerror.value="Fill all the Form";
+            return;
+        }
     const formdata={
         email:email.value,
         password:password.value
@@ -45,7 +53,10 @@ const onSubmit=async()=>{
     }
 }
 catch(error){
-    console.log(error);
+    // console.log(error);
+    console.log(error.response.data.message);
+    validateerror.value=error.response.data.message
+    
 }
 }
 

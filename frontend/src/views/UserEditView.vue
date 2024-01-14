@@ -16,6 +16,7 @@
         <label for="password">Password</label>
         <input type="password" id="password" v-model="userData.value.password" />
     </div>
+    
     <div>
         <label for="dob">Date of Birth</label>
         <input type="date" id="dob" v-model="userData.value.dob" />
@@ -45,7 +46,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, reactive } from 'vue';
+import { ref, onMounted, reactive ,computed } from 'vue';
 import { useRoute } from 'vue-router';
 import axios from 'axios';
 import router from '@/router';
@@ -57,7 +58,9 @@ const userData = reactive({ value: {} });
 onMounted(() => {
     params.value = route.params.id; 
     fetchUser();
+    // formattedDate();
 });
+
 
 const fetchUser = async () => {
     try {

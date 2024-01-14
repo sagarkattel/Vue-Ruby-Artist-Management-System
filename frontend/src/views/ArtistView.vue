@@ -1,7 +1,7 @@
 <template>
     <div>
       <h1>Artist Management System</h1>
-      <button @click="navigatecreateuser" class="buttons">Create Music</button>
+      <button @click="navigatecreateuser" class="buttons">Create Artist</button>
   
       
 

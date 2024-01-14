@@ -4,6 +4,7 @@ export const useUserStore = defineStore("users", {
   state: () => ({
     token: localStorage.getItem("token") || null,
     user: JSON.parse(localStorage.getItem("user")) || null,
+    error:null,
   }),
 
   actions: {

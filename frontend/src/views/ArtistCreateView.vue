@@ -2,9 +2,10 @@
     <h1>Create Artist</h1>
 
     <ul>
-        <li v-for="error in validateerror" :key="error">
+        <li v-for="error in validateerror" :key="error" class="error">
             {{ error }}
         </li>
+        <br>
     </ul>
     <div>
         <label for="name">Name</label>

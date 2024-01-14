@@ -2,6 +2,13 @@
 
 <template>
     <h1>Register</h1>
+    <ul>
+        <li v-for="error in validateerror" :key="error" class="error">
+            {{ error }} 
+        </li>
+        <br>
+    
+    </ul>
     <div>
         <label for="first_name">Fist Name</label>
         <input type="text" id="first_name"  />
@@ -17,6 +24,10 @@
     <div>
         <label for="password">Password</label>
         <input type="password" id="password" />
+    </div>
+    <div>
+        <label for="confirm password">Confirm Password</label>
+        <input type="password" id="password_confirmation" />
     </div>
     <div>
         <label for="dob">Date of Birth</label>
@@ -58,6 +69,8 @@ import axios from 'axios';
 import { ref } from 'vue';
 // const name=ref("");
 
+const validateerror=ref("");
+
 const onSubmit=async()=>{
     try{
     const formdata={
@@ -65,6 +78,7 @@ const onSubmit=async()=>{
         last_name:last_name.value,
         email:email.value,
         password:password.value,
+        password_confirmation:password_confirmation.value,
         phone:phone.value,
         dob:dob.value,
         gender:gender.value,
@@ -81,7 +95,14 @@ const onSubmit=async()=>{
     
 
 catch(error){
-    console.log(error)
+    console.log(error);
+    if (error.response) {
+      console.error("Server error:", error.response.data);
+      if (error.response.data.errors) {
+        console.log("Validation errors:", error.response.data.errors);
+        validateerror.value=error.response.data.errors
+      }
+    }
 }
 
 }
