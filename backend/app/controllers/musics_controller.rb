@@ -10,7 +10,10 @@ class MusicsController <ApplicationController
   end
 
   def show
-
+    @artist_id = params[:artist_id]
+    @music_id = params[:id]
+    @musics = Music.where(artist_id: @artist_id,id:@music_id)
+    render json: @musics
   end
 
   def new
@@ -70,7 +73,7 @@ class MusicsController <ApplicationController
   end  
 
   def music_params
-    params.require(:music).permit(:title, :album_name, :genre, :artist_id)
+    params.permit(:title, :album_name, :genre, :artist_id)
   end
 
 end
