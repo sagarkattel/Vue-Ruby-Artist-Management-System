@@ -42,6 +42,14 @@ import { ref, onMounted, reactive,computed } from 'vue';
 import { useRoute } from 'vue-router';
 import axios from 'axios';
 import router from '@/router';
+import { useUserStore } from "@/stores/user";
+
+const userStore = useUserStore();
+
+
+const config = {
+  headers: { Authorization: `Bearer ${userStore.token}` }
+};
 
 const params = ref("");
 const route = useRoute();
@@ -66,7 +74,7 @@ const formattedDate = computed(() => {
 
 const fetchArtists = async () => {
     try {
-        const response = await axios.get(`http://127.0.0.1:3000/artists/${params.value}`);
+        const response = await axios.get(`http://127.0.0.1:3000/artists/${params.value}`,config);
         Object.assign(artistData.value, response.data);
         console.log("Artist Data", artistData.value);
     } catch (error) {
@@ -84,7 +92,7 @@ const onSubmit = async() => {
         first_release_year:parseInt(first_release_year.value),
         no_of_albums_released:parseInt(no_of_albums_released.value)
     }
-    const response=await axios.put(`http://127.0.0.1:3000/artists/${params.value}`,formdata);
+    const response=await axios.put(`http://127.0.0.1:3000/artists/${params.value}`,formdata,config);
     if (response.status === 200 ) {
             router.push("/artist");
         } else {

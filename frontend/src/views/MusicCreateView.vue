@@ -39,6 +39,14 @@ import axios from 'axios';
 import { useRoute } from 'vue-router';
 import router from "@/router/index.js";
 const route = useRoute();
+import { useUserStore } from "@/stores/user";
+
+const userStore = useUserStore();
+
+
+const config = {
+  headers: { Authorization: `Bearer ${userStore.token}` }
+};
 const musicData=ref([{}]);
 const Artistname=ref("");
 
@@ -56,7 +64,7 @@ onMounted(() => {
 
 const fetchArtist=async()=>{
   try {
-    const response = await axios.get(`http://127.0.0.1:3000/artists/${paramsartistid.value}`);
+    const response = await axios.get(`http://127.0.0.1:3000/artists/${paramsartistid.value}`,config);
     Artistname.value=response.data.name
     // console.log("Artist Name",response.data.name);
   } catch (error) {
@@ -73,7 +81,7 @@ const onSubmit = async() => {
     }
 
     console.log("onSubmit");
-    const response=await axios.post(`http://127.0.0.1:3000/artists/${paramsartistid.value}/musics`,formdata)
+    const response=await axios.post(`http://127.0.0.1:3000/artists/${paramsartistid.value}/musics`,formdata,config)
     console.log(response);
     if (response.status === 201 ) {
       router.push({ name: 'music', params: { artistid: route.params.artistid } });

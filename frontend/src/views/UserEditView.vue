@@ -50,10 +50,18 @@ import { ref, onMounted, reactive ,computed } from 'vue';
 import { useRoute } from 'vue-router';
 import axios from 'axios';
 import router from '@/router';
+import { useUserStore } from "@/stores/user";
+
+const userStore = useUserStore();
 
 const params = ref("");
 const route = useRoute();
 const userData = reactive({ value: {} });
+
+
+const config = {
+  headers: { Authorization: `Bearer ${userStore.token}` }
+};
 
 onMounted(() => {
     params.value = route.params.id; 
@@ -64,7 +72,7 @@ onMounted(() => {
 
 const fetchUser = async () => {
     try {
-        const response = await axios.get(`http://127.0.0.1:3000/user/${params.value}`);
+        const response = await axios.get(`http://127.0.0.1:3000/user/${params.value}`,config);
         Object.assign(userData.value, response.data);
         console.log("User Data", userData.value);
     } catch (error) {
@@ -84,7 +92,7 @@ const onSubmit = async() => {
         gender: userData.value.gender,
         address: userData.value.address
     }
-    const response=await axios.put(`http://127.0.0.1:3000/user/${params.value}`,formdata);
+    const response=await axios.put(`http://127.0.0.1:3000/user/${params.value}`,formdata,config);
     console.log(response);
     if (response.status===200){
         router.push("/user")

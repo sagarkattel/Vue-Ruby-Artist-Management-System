@@ -43,6 +43,15 @@ const route = useRoute();
 // const musicData=ref([{}]);
 // const musicData=reactive({ value: {} });
 const musicData = reactive({ value: {} });
+
+import { useUserStore } from "@/stores/user";
+
+const userStore = useUserStore();
+
+
+const config = {
+  headers: { Authorization: `Bearer ${userStore.token}` }
+};
 const Artistname=ref("");
 
 const paramsartistid = ref("");
@@ -61,7 +70,7 @@ onMounted(() => {
 
 const fetchArtist=async()=>{
   try {
-    const response = await axios.get(`http://127.0.0.1:3000/artists/${paramsartistid.value}`);
+    const response = await axios.get(`http://127.0.0.1:3000/artists/${paramsartistid.value}`,config);
     Artistname.value=response.data.name
     // console.log("Artist Name",response.data.name);
   } catch (error) {
@@ -71,7 +80,7 @@ const fetchArtist=async()=>{
 
 const fetchMusic=async ()=>{
   try {
-    const response = await axios.get(`http://127.0.0.1:3000/artists/${paramsartistid.value}/musics/${paramsmusicid.value}`);
+    const response = await axios.get(`http://127.0.0.1:3000/artists/${paramsartistid.value}/musics/${paramsmusicid.value}`,config);
     // Object.assign(musicData.value, response.data);
     musicData.value = response.data[0];
     console.log("Music Data",response.data);
@@ -90,7 +99,7 @@ const onSubmit = async() => {
     }
 
     console.log("onSubmit");
-    const response=await axios.put(`http://127.0.0.1:3000/artists/${paramsartistid.value}/musics/${paramsmusicid.value}`,formdata)
+    const response=await axios.put(`http://127.0.0.1:3000/artists/${paramsartistid.value}/musics/${paramsmusicid.value}`,formdata,config)
     console.log(response);
     if (response.status === 200 ) {
       router.push({ name: 'music', params: { artistid: route.params.artistid } });

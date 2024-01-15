@@ -22,8 +22,8 @@ import { useUserStore } from "@/stores/user";
 
 
 
-const userStore = useUserStore();
 
+const userStore = useUserStore();
 
 
 const logout=()=>{

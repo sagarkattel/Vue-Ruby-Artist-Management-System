@@ -3,7 +3,7 @@
 <template>
   <div>
     <h1>Users</h1>
-    <button @click="gotocreateuser"  class="buttons">Create User</button>
+    <button @click="gotocreateuser" class="buttons">Create User</button>
 
 
     <table class="user-table">
@@ -14,7 +14,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(detail, index) in users" :key="index">
+        <tr v-for="(detail, index) in userData" :key="index">
           <td>{{ detail.email }}</td>
           <td>
             <router-link :to="{ path: '/edituser/' + detail.id }">Edit</router-link> |
@@ -26,47 +26,52 @@
   </div>
 </template>
 
-<script>
+<script setup>
   import router from '@/router';
 import axios from 'axios';
-  
-  export default {
-    data() {
-      return {
-        users: [],
-      };
-    },
-    mounted() {
-      this.fetchUsers();
-    },
-    methods: {
-      async fetchUsers() {
-        try {
-          const response = await axios.get('http://127.0.0.1:3000/user'); 
-          this.users = response.data;
-          console.log(response.data)
-        } catch (error) {
-          console.error('Error fetching artists:', error);
-        }
-      },
-      async deleteUser(id) {
-        try{
-          console.log("Delete id :",id)
-          const response=await axios.delete(`http://127.0.0.1:3000/user/${id}`);
-          console.log(response);
-         
+  import {onMounted, ref} from "vue";
+  import { useUserStore } from "@/stores/user";
 
-        }
-        catch(error){
-          console.log(error)
-        }
-        
-      },
-      gotocreateuser(){
-        router.push("/register")
-      }
-    },
+  const userStore = useUserStore();
+  const userData=ref([{}]);
+
+  // console.log("User Store token",userStore.token)
+
+
+  const config = {
+    headers: { Authorization: `Bearer ${userStore.token}` }
   };
+
+onMounted(()=>{
+  fetchUsers();
+})
+
+  const fetchUsers=async ()=> {
+    try {
+      const response = await axios.get('http://127.0.0.1:3000/user',
+          config
+      );
+      userData.value = response.data;
+      console.log(response.data)
+    } catch (error) {
+      console.error('Error fetching artists:', error);
+    }
+  }
+
+    const deleteUser=async (id)=> {
+      try {
+        const response = await axios.delete(`http://127.0.0.1:3000/user/${id}`,config);
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
+  const gotocreateuser=()=>{
+    router.push("/register")
+  }
+
+
+
   </script>
 
 <style>

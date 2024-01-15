@@ -50,7 +50,14 @@ import axios from 'axios';
 
 import router from '@/router';
 import { ref } from 'vue';
+import { useUserStore } from "@/stores/user";
 
+const userStore = useUserStore();
+
+
+const config = {
+  headers: { Authorization: `Bearer ${userStore.token}` }
+};
 const validateerror=ref("")
 
 
@@ -66,7 +73,7 @@ const onSubmit = async() => {
     }
 
     console.log("onSubmit");
-    const response=await axios.post("http://127.0.0.1:3000/artists",formdata)
+    const response=await axios.post("http://127.0.0.1:3000/artists",formdata,config)
     console.log(response);
     if (response.status === 201 ) {
             router.push("/artist");

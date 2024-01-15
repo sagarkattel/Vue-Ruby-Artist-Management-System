@@ -20,6 +20,15 @@ import axios from 'axios';
 import { useRoute } from 'vue-router';
 import router from "@/router/index.js";
 const route = useRoute();
+import { useUserStore } from "@/stores/user";
+
+const userStore = useUserStore();
+
+
+const config = {
+  headers: { Authorization: `Bearer ${userStore.token}` }
+};
+
 const musicData=ref([{}]);
 const Artistname=ref("");
 
@@ -35,7 +44,7 @@ onMounted(() => {
 
 const fetchArtist=async()=>{
     try {
-        const response = await axios.get(`http://127.0.0.1:3000/artists/${paramsartistid.value}`);
+        const response = await axios.get(`http://127.0.0.1:3000/artists/${paramsartistid.value}`,config);
         Artistname.value=response.data.name
         // console.log("Artist Name",response.data.name);
     } catch (error) {
@@ -45,7 +54,7 @@ const fetchArtist=async()=>{
 
 const fetchMusics = async () => {
     try {
-        const response = await axios.get(`http://127.0.0.1:3000/artists/${paramsartistid.value}/musics`);
+        const response = await axios.get(`http://127.0.0.1:3000/artists/${paramsartistid.value}/musics`,config);
         Object.assign(musicData.value, response.data);
         // console.log("User Data", musicData.value);
     } catch (error) {
@@ -55,7 +64,7 @@ const fetchMusics = async () => {
 
 const deleteMusic=async (artistid,musicid)=>{
   try{
-    const response=await axios.delete(`http://127.0.0.1:3000/artists/${artistid}/musics/${musicid}`)
+    const response=await axios.delete(`http://127.0.0.1:3000/artists/${artistid}/musics/${musicid}`,config)
     console.log(response)
   }
   catch(error){
