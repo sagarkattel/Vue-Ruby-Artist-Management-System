@@ -18,7 +18,7 @@
       </tr>
       </thead>
       <tbody>
-      <tr v-for="artist in userData" :key="artist.id">
+      <tr v-for="artist in artistData" :key="artist.id">
         <td>{{ artist?.name }}</td>
         <td>{{ artist?.dob }}</td>
         <td>{{ artist?.gender }}</td>
@@ -43,39 +43,24 @@
 <script setup>
 import axios from 'axios';
 import router from '@/router';
-import {onMounted, ref} from "vue";
+import {onMounted, reactive, ref} from "vue";
 import { useUserStore } from "@/stores/user";
 
 const userStore = useUserStore();
 
+import {fetchArtists} from "@/utils/api.js";
 
-const config = {
-  headers: { Authorization: `Bearer ${userStore.token}` }
-};
-const userData=ref([{}]);
+import {deleteArtist} from "@/utils/api.js";
+
+
+const artistData=ref([{}]);
+
 
 onMounted(()=>{
-  fetchArtists()
+  fetchArtists(artistData)
 })
 
-const fetchArtists=async ()=>{
-  try {
-    const response = await axios.get('http://127.0.0.1:3000/artists',config);
-    userData.value = response.data;
-    console.log(response.data)
-  } catch (error) {
-    console.error('Error fetching artists:', error);
-  }
-}
 
-const deleteArtist=async (id)=> {
-  try {
-    const response = await axios.delete(`http://127.0.0.1:3000/artists/${id}`,config)
-    console.log(response)
-  } catch (error) {
-    console.log(error)
-  }
-}
 
 const navigatecreateuser=()=>{
   router.push("/createartist")

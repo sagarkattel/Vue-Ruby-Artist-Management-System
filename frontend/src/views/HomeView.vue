@@ -37,6 +37,8 @@ const loginroute=()=>{
 const registerroute=()=>{
   router.push("/register")
 }
+
+
 </script>
 
 <style scoped>

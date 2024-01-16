@@ -1,17 +1,17 @@
 
 <template>
-    <h1>Musics of Artist {{ Artistname }}</h1>
+  <h1>Musics of Artist {{ Artistname }}</h1>
   <button @click="handleCreateMusic" class="buttons">Create Music</button>
-    <div v-for="music in musicData" :key="music.id" class="musicdiv">
-        Music Title: {{ music.title }} <br>
-        Album Name: {{ music.album_name }} <br>
-        Genre: {{ music.genre }} <br>
-      <router-link v-if="music.id !== undefined" :to="{ name: 'editmusic', params: { artistid: paramsartistid.value, musicid: music.id } }">Edit</router-link>
+  <div v-for="music in musicData" :key="music.id" class="musicdiv">
+    Music Title: {{ music.title }} <br>
+    Album Name: {{ music.album_name }} <br>
+    Genre: {{ music.genre }} <br>
+    <router-link v-if="music.id !== undefined" :to="{ name: 'editmusic', params: { artistid: paramsartistid.value, musicid: music.id } }">Edit</router-link>
 
 
-      <br>
-      <a href='' @click="deleteMusic(paramsartistid,music.id)">Delete</a>
-    </div>
+    <br>
+    <a href='' @click="deleteMusic(paramsartistid,music.id)">Delete</a>
+  </div>
 </template>
 
 <script setup>
@@ -29,48 +29,33 @@ const config = {
   headers: { Authorization: `Bearer ${userStore.token}` }
 };
 
+import {fetchMusics,deleteMusic} from "@/utils/api.js";
+
 const musicData=ref([{}]);
 const Artistname=ref("");
 
 const paramsartistid = ref("");
 onMounted(() => {
-    paramsartistid.value = route.params.artistid; 
-    fetchMusics();
-    fetchArtist();
+  paramsartistid.value = route.params.artistid;
+  fetchMusics(paramsartistid,musicData);
+  fetchArtist();
 
-    console.log("Params Value",paramsartistid.value)
+  console.log("Params Value",paramsartistid.value)
 });
 
 
 const fetchArtist=async()=>{
-    try {
-        const response = await axios.get(`http://127.0.0.1:3000/artists/${paramsartistid.value}`,config);
-        Artistname.value=response.data.name
-        // console.log("Artist Name",response.data.name);
-    } catch (error) {
-        console.log(error);
-    }
-}
-
-const fetchMusics = async () => {
-    try {
-        const response = await axios.get(`http://127.0.0.1:3000/artists/${paramsartistid.value}/musics`,config);
-        Object.assign(musicData.value, response.data);
-        // console.log("User Data", musicData.value);
-    } catch (error) {
-        console.log(error);
-    }
-}
-
-const deleteMusic=async (artistid,musicid)=>{
-  try{
-    const response=await axios.delete(`http://127.0.0.1:3000/artists/${artistid}/musics/${musicid}`,config)
-    console.log(response)
-  }
-  catch(error){
-    console.log(error)
+  try {
+    const response = await axios.get(`http://127.0.0.1:3000/artists/${paramsartistid.value}`,config);
+    Artistname.value=response.data.name
+    // console.log("Artist Name",response.data.name);
+  } catch (error) {
+    console.log(error);
   }
 }
+
+
+
 
 
 const handleCreateMusic=()=>{
@@ -82,8 +67,8 @@ const handleCreateMusic=()=>{
 
 <style scoped>
 .musicdiv{
-    padding: 1.5%;
+  padding: 1.5%;
 
-   
+
 }
 </style>
